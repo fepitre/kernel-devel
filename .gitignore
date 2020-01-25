@@ -1,0 +1,4 @@
+linux/
+qubes-linux-kernel/
+build/
+*.tar.gz
