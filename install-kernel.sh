@@ -8,7 +8,7 @@ if [ -e "$LOCALDIR/version" ]; then
     cp "$LOCALDIR/vmlinuz-$VERSION" /boot/
     cp "$LOCALDIR/config-$VERSION" /boot/
     cp -r "$LOCALDIR/lib/modules/$VERSION" /lib/modules/
-    dracut --kver "$VERSION" -fv
+    dracut --kver "$VERSION" -fv "/boot/initramfs-$VERSION.img"
     grub2-mkconfig -o /boot/grub2/grub.cfg
 else
     echo "Cannot find kernel version"
