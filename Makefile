@@ -27,16 +27,17 @@ prepare: gen-config
 build:
 	$(MAKE) -C $(WORKDIR)/linux
 
-install: VERSION=$(shell make -C $(WORKDIR)/linux -s kernelversion)
+install: RELEASE=$(shell make -C $(WORKDIR)/linux -s kernelrelease)
 install:
+	@rm -rf $(WORKDIR)/build
 	@mkdir -p $(WORKDIR)/build
-	@echo $(VERSION) > $(WORKDIR)/build/version
-	@cp $(WORKDIR)/linux/arch/x86/boot/bzImage $(WORKDIR)/build/vmlinuz-$(VERSION)
-	@cp $(WORKDIR)/linux/.config $(WORKDIR)/build/config-$(VERSION)
+	@echo $(RELEASE) > $(WORKDIR)/build/release
+	@cp $(WORKDIR)/linux/arch/x86/boot/bzImage $(WORKDIR)/build/vmlinuz-$(RELEASE)
+	@cp $(WORKDIR)/linux/.config $(WORKDIR)/build/config-$(RELEASE)
 	@$(MAKE) -C $(WORKDIR)/linux INSTALL_MOD_PATH=$(WORKDIR)/build INSTALL_MOD_STRIP=1 modules_install
 	@cp $(WORKDIR)/install-kernel.sh $(WORKDIR)/build/
 
-archive: VERSION=$(shell cat $(WORKDIR)/build/version)
+archive: RELEASE=$(shell cat $(WORKDIR)/build/release)
 archive:
-	@cd $(WORKDIR)/build/ && tar cvf kernel-$(VERSION).tar.gz --exclude kernel-$(VERSION).tar.gz --xform="s%^\./%kernel-$(VERSION)/%" .
-	@mv $(WORKDIR)/build/kernel-$(VERSION).tar.gz $(WORKDIR)
+	@cd $(WORKDIR)/build/ && tar cvf kernel-$(RELEASE).tar.gz --exclude kernel-$(RELEASE).tar.gz --xform="s%^\./%kernel-$(RELEASE)/%" .
+	@mv $(WORKDIR)/build/kernel-$(RELEASE).tar.gz $(WORKDIR)

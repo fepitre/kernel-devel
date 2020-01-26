@@ -2,13 +2,13 @@
 
 LOCALDIR="$(readlink -f "$(dirname "$0")")"
 
-if [ -e "$LOCALDIR/version" ]; then
-    VERSION="$(cat version)"
+if [ -e "$LOCALDIR/release" ]; then
+    RELEASE="$(cat "$LOCALDIR/release")"
 
-    cp "$LOCALDIR/vmlinuz-$VERSION" /boot/
-    cp "$LOCALDIR/config-$VERSION" /boot/
-    cp -r "$LOCALDIR/lib/modules/$VERSION" /lib/modules/
-    dracut --kver "$VERSION" -fv "/boot/initramfs-$VERSION.img"
+    cp "$LOCALDIR/vmlinuz-$RELEASE" /boot/
+    cp "$LOCALDIR/config-$RELEASE" /boot/
+    cp -r "$LOCALDIR/lib/modules/$RELEASE" /lib/modules/
+    dracut --kver "$RELEASE" -fv "/boot/initramfs-$RELEASE.img"
     grub2-mkconfig -o /boot/grub2/grub.cfg
 else
     echo "Cannot find kernel version"
